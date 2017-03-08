@@ -7,8 +7,8 @@ main = do
   conn <- connectOrientDb
     defaultOrientDbConnectionInfo {
       orientDbUser = "root",
-      orientDbPassword ="root",
-      orientDbDatabase = "MovieRatings"}
+      orientDbPassword ="CHANGEME",
+      orientDbDatabase = "GratefulDeadConcerts"}
   printConnection conn
   closeConnection conn
   return ()

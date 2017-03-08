@@ -20,10 +20,10 @@ executable             orientdb
   main-is:             Main.hs
   other-modules:       Orientdb.Core
   other-extensions:    OverloadedStrings
-  build-depends:       base >=4.7 && <4.8,
-                       network >=2.6 && <2.7,
-                       bytestring >=0.10 && <0.11,
-                       utf8-string >=1 && <1.1,
-                       binary >=0.7 && <0.8,
-                       binary-strict >= 0.4.8.2 && < 0.4.9
+  build-depends:       base,
+                       network,
+                       network-socket-options,
+                       bytestring,
+                       utf8-string,
+                       binary
   default-language:    Haskell2010

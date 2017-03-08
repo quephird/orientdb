@@ -25,6 +25,7 @@ import Control.Monad (liftM)
 import Control.Applicative ((<$>),(<*>))
 import Network.Socket hiding (send, sendTo, recv, recvFrom)
 import Network.Socket.ByteString (send,recvFrom)
+import Network.Socket.Options (setSocketTimeouts, Microseconds)
 
 import qualified Data.ByteString as BS (ByteString,length,unpack,empty,append)
 import qualified Data.ByteString.UTF8 as U (toString)
@@ -39,11 +40,10 @@ import Data.IORef
 bufferLength :: Int
 bufferLength = 1024
 
-recvTimeOut :: Int
+recvTimeOut :: Microseconds
 recvTimeOut = 10000
 
-
-sendTimeOut :: Int
+sendTimeOut :: Microseconds
 sendTimeOut = 10000
 
 driverName :: BS.ByteString
@@ -298,11 +298,13 @@ getIf g c d
 putString :: BS.ByteString -> Put
 putString str = putWord32be (fromIntegral $ BS.length str) >> putByteString str
 
+-- The socket options passed below actually need to be structs
+-- under the covers, not just simply Ints, and so
+-- Network.Socket.setSocketOption won't suffice.
 createSocket :: IO Socket
 createSocket = socket AF_INET Stream defaultProtocol >>=
         (\ sock ->
-          setSocketOption sock RecvTimeOut recvTimeOut >>
-          setSocketOption sock SendTimeOut sendTimeOut >>
+          setSocketTimeouts sock recvTimeOut sendTimeOut >>
           setSocketOption sock KeepAlive   1 >>
           return sock )
 
